@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Dropdown } from "./Dropdown";
 
 interface TodoListItemProps {
@@ -6,9 +6,10 @@ interface TodoListItemProps {
   toggleComplete: ToggleComplete;
   onRemoveTodo: RemoveTodo;
   editTodo: EditTodo;
+  addTag: AddTag;
 }
 
-export const TodoListItem: React.FC<TodoListItemProps> = ({ todo, toggleComplete, onRemoveTodo, editTodo }) => {
+export const TodoListItem: React.FC<TodoListItemProps> = ({ todo, toggleComplete, onRemoveTodo, editTodo, addTag }) => {
   const [isEditOn, setIsEditOn] = useState<boolean>(false);
   const [inputText, setInputText] = useState<string>(todo.text);
 
@@ -17,7 +18,12 @@ export const TodoListItem: React.FC<TodoListItemProps> = ({ todo, toggleComplete
   }
 
   const onEdit = () => {
-    console.log('edit');
+    setIsEditOn(true);
+  }
+
+  const onAddTag = () => {
+    const id = 1;
+    addTag(id);
   }
 
   const onTodoUpdate = (e: any) => {
@@ -34,7 +40,16 @@ export const TodoListItem: React.FC<TodoListItemProps> = ({ todo, toggleComplete
     },
     {
       value: "Edit",
-      onClick: onEdit,
+      onClick: () => {
+        onEdit();
+      },
+      color: "blue",
+    },
+    {
+      value: "tag",
+      onClick: () => {
+        addTag(1, 1);
+      },
       color: "blue",
     }
   ]
@@ -46,7 +61,11 @@ export const TodoListItem: React.FC<TodoListItemProps> = ({ todo, toggleComplete
         onChange={() => toggleComplete(todo)}
         checked={todo.complete}
         />
-        {isEditOn ? <input className="edit-input" type="text" value={inputText} onChange={(e) => onTodoUpdate(e)}/> : todo.text}
+        {isEditOn ? <input className="edit-input" type="text" onKeyPress={((event) => {
+          if(event.key === 'Enter'){
+            setIsEditOn(false);
+          }
+        })} value={inputText} onChange={(e) => onTodoUpdate(e)}/> : todo.text}
       </label>
       <Dropdown
         options={dropdownOptions}

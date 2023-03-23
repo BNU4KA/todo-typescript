@@ -4,6 +4,21 @@ import { TodoForm } from './components/TodoForm';
 import { TodoList } from './components/TodoList';
 
 function App() {
+
+  // var file = "json/base.json";
+  // var myObj;
+  // var xmlhttp = new XMLHttpRequest();
+  
+  // xmlhttp.onreadystatechange = function()
+  // {
+  //     if (this.readyState == 4 && this.status == 200)
+  //     {
+  //         myObj = JSON.parse(this.responseText);
+  //     }
+  // };
+  // xmlhttp.open("GET", file, true);
+  // xmlhttp.send();
+
   const [todos, setTodos] = useState<Array<Todo>>([]);
 
   const toggleComplete: ToggleComplete = selectedTodo => {
@@ -18,7 +33,7 @@ function App() {
 
   const addTodo: AddTodo = newTodo => {
     if (newTodo !== "") {
-      setTodos([...todos, { text: newTodo, complete: false }]);
+      setTodos([...todos, { text: newTodo, complete: false, tags: [], id: todos.length + 1 }]);
     }
   };
 
@@ -32,6 +47,31 @@ function App() {
     console.log(todoToUpdateIndex);
   }
 
+  const addTag = (todoId, tagId) => {
+    const tag = { title: 'qwe' };
+    console.log(tag);
+    setTodos(((prevState) => (todos.map((item) => {
+      if (item.id === todoId) {
+        return { ...item, tags: [...item.tags, tag] }
+      }
+      return item;
+    }) )));
+  }
+
+  console.log(todos);
+
+  const tags = [
+    {
+      title: 'пошли',
+    },
+    {
+      title: 'нахуй',
+    },
+    {
+      title: 'с таким тз',
+    }
+  ];
+  
   return (
     <div className="todo-app">
       <header>
@@ -40,7 +80,14 @@ function App() {
         </h1>
       </header>
       <TodoForm addTodo={addTodo}/>
-      <TodoList todos={todos} toggleComplete={toggleComplete} onRemoveTodo={removeTodo} editTodo={editTodo}/>
+      <div className='tags-section'>
+      {tags.map(({ title }) => (
+          <div className='tags-item'>
+            {title}
+          </div>
+      ))}
+      </div>
+      <TodoList todos={todos} toggleComplete={toggleComplete} onRemoveTodo={removeTodo} editTodo={editTodo} addTag={addTag}/>
     </div>
   );
 };

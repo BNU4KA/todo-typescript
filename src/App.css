@@ -138,3 +138,15 @@ ul {
 .blue {
   color: blue;
 }
+
+.tags-section {
+  display: flex;
+  justify-content: center;
+}
+
+.tags-item {
+  padding: 10px;
+  cursor: pointer;
+  margin: 5px;
+  background-color: gray;
+}
